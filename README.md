@@ -1,6 +1,6 @@
 # Terminal agent
 
-This repository shows how you can set up a simple "terminal agent" that will interact with your terminal. The entry point for the program is `main.py`.
+This repository shows how you can set up a simple "terminal agent" that will interact with your terminal on MacOS (and maybe Linux). The entry point for the program is `main.py`.
 
 ![Graph](graph.png)
 
