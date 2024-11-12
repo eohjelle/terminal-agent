@@ -16,9 +16,8 @@ app = App(model, terminal)
 app.draw_graph("graph.png")
 
 # Run the app
-# instructions = """Create a file called "fibonacci.py" that contains a function called "fibonacci" that takes an integer n and returns the nth Fibonacci number."""
+instructions = "Create a file called 'fibonacci.py' that contains a function called 'fibonacci' that takes an integer n and returns the nth Fibonacci number. User this to compute the "
 # instructions = "Inside a folder 'snake', implement the classic game of snake."
 # instructions = "Add the first 100 numbers."
-instructions = "Print my favorite color."
 # instructions = "Print the first 10 Fibonacci numbers."
 app.run(instructions)

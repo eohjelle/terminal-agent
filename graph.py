@@ -11,7 +11,6 @@ from langgraph.prebuilt import ToolNode
 from terminal import Terminal
 from pydantic import BaseModel, Field
 import ast
-from pprint import pprint
 
 # The terminal agent's output schema
 class response_schema(BaseModel):
