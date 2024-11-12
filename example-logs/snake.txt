@@ -1,0 +1,314 @@
+(terminal-agent) eohjelle@Eivinds-Mac 2024-terminal-agent % python main.py
+
+Initializing terminal...
+=== Terminal ===
+
+(base) eohjelle@Eivinds-Mac 2024-terminal-agent % stty -icanon  
+
+=== User ===
+Inside a folder 'snake', implement the classic game of snake.
+
+
+=== Terminal agent ===
+
+Reasoning: First, I'll create a directory called 'snake' and create a Python script to implement the Snake game using Python's curses library for terminal-based graphics.
+
+Command: mkdir snake && cd snake && touch snake.py
+
+=== Respond with r to respond to the terminal agent, s to stop, or anything else to execute the command. ===
+
+=== Terminal ===
+
+(base) eohjelle@Eivinds-Mac 2024-terminal-agent % mkdir snake && cd snake && touch snake.py
+
+=== Terminal agent ===
+
+Reasoning: Now I'll create a Python implementation of the Snake game using the curses library. I'll write the code to the snake.py file.
+
+Command: cat > snake.py << 'EOL'
+#!/usr/bin/env python3
+import curses
+import random
+import time
+
+def main(stdscr):
+    # Initialize curses
+    curses.curs_set(0)
+    stdscr.nodelay(1)
+    stdscr.timeout(100)
+
+    # Initialize colors
+    curses.start_color()
+    curses.init_pair(1, curses.COLOR_GREEN, curses.COLOR_BLACK)
+    curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)
+
+    # Get screen height and width
+    sh, sw = stdscr.getmaxyx()
+    
+    # Initialize snake position and direction
+    snake = [[sh//2, sw//2]]
+    direction = [0, 1]  # Moving right initially
+    
+    # Initialize food
+    food = [sh//2, sw//4]
+    
+    # Initialize score
+    score = 0
+    
+    # Game loop
+    while True:
+        # Get user input
+        key = stdscr.getch()
+        
+        if key == curses.KEY_UP and direction != [1, 0]:
+            direction = [-1, 0]
+        elif key == curses.KEY_DOWN and direction != [-1, 0]:
+            direction = [1, 0]
+        elif key == curses.KEY_LEFT and direction != [0, 1]:
+            direction = [0, -1]
+        elif key == curses.KEY_RIGHT and direction != [0, -1]:
+            direction = [0, 1]
+        elif key == ord('q'):
+            break
+            
+        # Calculate new head position
+        new_head = [snake[0][0] + direction[0], snake[0][1] + direction[1]]
+        
+        # Check for collisions with walls
+        if (new_head[0] >= sh or new_head[0] < 0 or 
+            new_head[1] >= sw or new_head[1] < 0):
+            break
+            
+        # Check for collisions with self
+        if new_head in snake[1:]:
+            break
+            
+        # Add new head
+        snake.insert(0, new_head)
+        
+        # Check if food is eaten
+        if snake[0] == food:
+            score += 1
+            # Generate new food
+            while True:
+                food = [random.randint(1, sh-2), random.randint(1, sw-2)]
+                if food not in snake:
+                    break
+        else:
+            snake.pop()
+            
+        # Clear screen
+        stdscr.clear()
+        
+        # Draw border
+        stdscr.border()
+        
+        # Draw snake
+        for y, x in snake:
+            stdscr.addch(y, x, curses.ACS_CKBOARD, curses.color_pair(1))
+            
+        # Draw food
+        stdscr.addch(food[0], food[1], '*', curses.color_pair(2))
+        
+        # Draw score
+        stdscr.addstr(0, 2, f' Score: {score} ')
+        
+        # Refresh screen
+        stdscr.refresh()
+
+if __name__ == '__main__':
+    curses.wrapper(main)
+EOL
+
+=== Respond with r to respond to the terminal agent, s to stop, or anything else to execute the command. ===
+
+=== Terminal ===
+
+(base) eohjelle@Eivinds-Mac snake % cat > snake.py << 'EOL'                     
+heredoc> #!/usr/bin/env python3
+heredoc> import curses
+heredoc> import random
+heredoc> import time
+heredoc> 
+heredoc> def main(stdscr):
+heredoc>     # Initialize curses
+heredoc>     curses.curs_set(0)
+heredoc>     stdscr.nodelay(1)
+heredoc>     stdscr.timeout(100)
+heredoc> 
+heredoc>     # Initialize colors
+heredoc>     curses.start_color()
+heredoc>     curses.init_pair(1, curses.COLOR_GREEN, curses.COLOR_BLACK)
+heredoc>     curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)
+heredoc> 
+heredoc>     # Get screen height and width
+heredoc>     sh, sw = stdscr.getmaxyx()
+heredoc>     
+heredoc>     # Initialize snake position and direction
+heredoc>     snake = [[sh//2, sw//2]]
+heredoc>     direction = [0, 1]  # Moving right initially
+heredoc>     
+heredoc>     # Initialize food
+heredoc>     food = [sh//2, sw//4]
+heredoc>     
+heredoc>     # Initialize score
+heredoc>     score = 0
+heredoc>     
+heredoc>     # Game loop
+heredoc>     while True:
+heredoc>         # Get user input
+heredoc>         key = stdscr.getch()
+heredoc>         
+heredoc>         if key == curses.KEY_UP and direction != [1, 0]:
+heredoc>             direction = [-1, 0]
+heredoc>         elif key == curses.KEY_DOWN and direction != [-1, 0]:
+heredoc>             direction = [1, 0]
+heredoc>         elif key == curses.KEY_LEFT and direction != [0, 1]:
+heredoc>             direction = [0, -1]
+heredoc>         elif key == curses.KEY_RIGHT and direction != [0, -1]:
+heredoc>             direction = [0, 1]
+heredoc>         elif key == ord('q'):
+heredoc>             break
+heredoc>             
+heredoc>         # Calculate new head position
+heredoc>         new_head = [snake[0][0] + direction[0], snake[0][1] + direction[1]]
+heredoc>         
+heredoc>         # Check for collisions with walls
+heredoc>         if (new_head[0] >= sh or new_head[0] < 0 or 
+heredoc>             new_head[1] >= sw or new_head[1] < 0):
+heredoc>             break
+heredoc>             
+heredoc>         # Check for collisions with self
+heredoc>         if new_head in snake[1:]:
+heredoc>             break
+heredoc>             
+heredoc>         # Add new head
+heredoc>         snake.insert(0, new_head)
+heredoc>         
+heredoc>         # Check if food is eaten
+heredoc>         if snake[0] == food:
+heredoc>             score += 1
+heredoc>             # Generate new food
+heredoc>             while True:
+heredoc>                 food = [random.randint(1, sh-2), random.randint(1, sw-2)]
+heredoc>                 if food not in snake:
+heredoc>                     break
+heredoc>         else:
+heredoc>             snake.pop()
+heredoc>             
+heredoc>         # Clear screen
+heredoc>         stdscr.clear()
+heredoc>         
+heredoc>         # Draw border
+heredoc>         stdscr.border()
+heredoc>         
+heredoc>         # Draw snake
+heredoc>         for y, x in snake:
+heredoc>             stdscr.addch(y, x, curses.ACS_CKBOARD, curses.color_pair(1))
+heredoc>             
+heredoc>         # Draw food
+heredoc>         stdscr.addch(food[0], food[1], '*', curses.color_pair(2))
+heredoc>         
+heredoc>         # Draw score
+heredoc>         stdscr.addstr(0, 2, f' Score: {score} ')
+heredoc>         
+heredoc>         # Refresh screen
+heredoc>         stdscr.refresh()
+heredoc> 
+heredoc> if __name__ == '__main__':
+heredoc>     curses.wrapper(main)
+heredoc> EOL
+
+=== Terminal agent ===
+
+Reasoning: I've created a Python implementation of the Snake game using the curses library. Now I'll make the script executable and add a README file with instructions.
+
+Command: chmod +x snake.py && touch README.md
+
+=== Respond with r to respond to the terminal agent, s to stop, or anything else to execute the command. ===
+
+=== Terminal ===
+
+(base) eohjelle@Eivinds-Mac snake % chmod +x snake.py && touch README.md        
+
+=== Terminal agent ===
+
+Reasoning: Now I'll create a README.md file with instructions on how to play the game.
+
+Command: cat > README.md << 'EOL'
+# Terminal Snake Game
+
+A classic Snake game implementation in Python using the curses library.
+
+## How to Play
+
+1. Run the game by executing:
+   ```
+   ./snake.py
+   ```
+
+2. Controls:
+   - Use arrow keys to control the snake's direction
+   - Press 'q' to quit the game
+
+3. Rules:
+   - Eat the red '*' to grow and increase your score
+   - Avoid hitting the walls
+   - Avoid hitting yourself
+   - Try to get the highest score possible!
+
+## Requirements
+- Python 3
+- curses library (usually comes pre-installed with Python)
+
+## Game Features
+- Score tracking
+- Colorful display (green snake, red food)
+- Border display
+- Collision detection
+EOL
+
+=== Respond with r to respond to the terminal agent, s to stop, or anything else to execute the command. ===
+
+=== Terminal ===
+
+(base) eohjelle@Eivinds-Mac snake % cat > README.md << 'EOL'                    
+heredoc> # Terminal Snake Game
+heredoc> 
+heredoc> A classic Snake game implementation in Python using the curses library.
+heredoc> 
+heredoc> ## How to Play
+heredoc> 
+heredoc> 1. Run the game by executing:
+heredoc>    ```
+heredoc>    ./snake.py
+heredoc>    ```
+heredoc> 
+heredoc> 2. Controls:
+heredoc>    - Use arrow keys to control the snake's direction
+heredoc>    - Press 'q' to quit the game
+heredoc> 
+heredoc> 3. Rules:
+heredoc>    - Eat the red '*' to grow and increase your score
+heredoc>    - Avoid hitting the walls
+heredoc>    - Avoid hitting yourself
+heredoc>    - Try to get the highest score possible!
+heredoc> 
+heredoc> ## Requirements
+heredoc> - Python 3
+heredoc> - curses library (usually comes pre-installed with Python)
+heredoc> 
+heredoc> ## Game Features
+heredoc> - Score tracking
+heredoc> - Colorful display (green snake, red food)
+heredoc> - Border display
+heredoc> - Collision detection
+heredoc> EOL
+
+=== Terminal agent ===
+
+Reasoning: I have successfully created a complete Snake game implementation with a README file. The game is now ready to play.
+
+Command: None
+
+=== Respond with r to respond to the terminal agent, or anything else to stop. ===

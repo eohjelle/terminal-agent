@@ -16,7 +16,6 @@ import ast
 class response_schema(BaseModel):
     reasoning: str = Field(description="- One or two sentences about what you have done so far to complete the task.\n- Briefly state what you plan to do next to complete the task.")
     zsh_command: str | None = Field(description="The next input to send to the terminal. Set this to None if there are no further commands to run.")
-    stop: bool = Field(description="Whether to stop the terminal session. If there are more commands left to execute, set this to False. If you have completed the task, set this to True.")
 
     def __str__(self):
         return f"Reasoning: {self.reasoning}\n\nCommand: {self.zsh_command}"
@@ -24,9 +23,9 @@ class response_schema(BaseModel):
 # Define the function for the terminal agent node
 def terminal_agent(state: MessagesState, model: BaseChatModel) -> MessagesState:
     print("\n=== Terminal agent ===\n")
-    system_message = """You are a terminal agent that can execute commands on a MacOS operating system. To start with, you will be given a task that can be completed by executing a series of commands in a terminal. Your job is to complete the task to the best of your ability.
-
-There is no restriction to the type of commands you can execute or the number of commands you can execute. After executing a command, you will be able to see the output and decide what to do next.
+    system_message = """You are a terminal agent that can execute commands in the terminal on a MacOS operating system. You have the ability to execute any command in the terminal and read the output. You are not able to interact with applications like a text editor or web browser.
+    
+You will be given a task that can be completed by executing a series of commands in a terminal. Your job is to complete the task to the best of your ability. There is no limit to the number of commands you can execute. After executing a command, you will be able to see the output and decide what to do next.
 
 If you need additional information to complete the task, ask the user for help using the "ask_user" tool.
 """
@@ -54,7 +53,7 @@ def execute_respond_or_stop(state: MessagesState) -> Literal[END, "execute_comma
         # The only tool the agent can call is the ask_user tool.
         print(f"\nTerminal agent asked the user for help:\n\n{state['messages'][-1].tool_calls[0].args['message']}\n")
         return "respond_to_agent"
-    elif last_message_content['zsh_command'] != None:
+    elif last_message_content['zsh_command'] not in [None, "None"]:
         response = input("\n=== Respond with r to respond to the terminal agent, s to stop, or anything else to execute the command. ===\n")
         match response:
             case "r":
@@ -63,11 +62,13 @@ def execute_respond_or_stop(state: MessagesState) -> Literal[END, "execute_comma
                 return END
             case _:
                 return "execute_command"
-    elif last_message_content['stop']:
-        print("\nTask completed!\n")
-        return END
     else:
-        return "respond_to_agent"
+        response = input("\n=== Respond with r to respond to the terminal agent, or anything else to stop. ===\n")
+        match response:
+            case "r":
+                return "respond_to_agent"
+            case _:
+                return END
 
 
 # The function for the respond to agent node
@@ -83,6 +84,8 @@ def execute_command(state: MessagesState, terminal: Terminal) -> MessagesState:
     tool_call_id = f"call_{len(state['messages'])}"
     last_message.tool_calls.append(ToolCall(name="terminal_input", args={"command": last_message_content['zsh_command']}, id=tool_call_id))
     output = terminal.execute(last_message_content['zsh_command'])
+    # with open("outputs.log", "a") as f:
+    #     f.write(f"\n\n\n{output}\n\n\n")
     return {"messages": [ToolMessage(content=output, tool_call_id=tool_call_id)]}
 
 def init_graph(model: BaseChatModel, terminal: Terminal):
