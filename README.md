@@ -3,6 +3,7 @@
 This repository shows how you can set up a simple "terminal agent" that will interact with your terminal. The entry point for the program is `main.py`.
 
 ![Graph](graph.png)
+
 I made this to familiarize myself with [LangGraph](https://langchain-ai.github.io/langgraph/), and it is not meant to be a production-ready application. If you're looking for that, see other projects such as [Aider](https://github.com/Aider-AI/aider) or [OpenInterpreter](https://github.com/OpenInterpreter/open-interpreter).
 
 Technically, the most painful part of the project ended up being recording terminal output using [pexpect](https://github.com/pexpect/pexpect).
