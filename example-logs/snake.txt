@@ -1,4 +1,4 @@
-(terminal-agent) eohjelle@Eivinds-Mac 2024-terminal-agent % python main.py
+(terminal-agent) eohjelle@Eivinds-Mac 2024-terminal-agent % python main.py "Inside a folder 'snake', implement the classic game of snake."
 
 Initializing terminal...
 === Terminal ===

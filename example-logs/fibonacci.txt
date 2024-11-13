@@ -1,4 +1,4 @@
-(terminal-agent) eohjelle@Eivinds-Mac 2024-terminal-agent % python main.py
+(terminal-agent) eohjelle@Eivinds-Mac 2024-terminal-agent % python main.py "Print the first 10 Fibonacci numbers."
 
 Initializing terminal...
 === Terminal ===

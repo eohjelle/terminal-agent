@@ -3,18 +3,21 @@ from graph import App
 from langchain_anthropic import ChatAnthropic
 from langchain_openai.chat_models.base import ChatOpenAI
 from langchain.globals import set_debug
+import sys
 
 # set_debug(True)
 
-# Setup
-terminal = Terminal()
-model = ChatAnthropic(model="claude-3-5-sonnet-20241022", temperature=0)
-# model = ChatOpenAI(model="gpt-4o-mini", temperature=0)
-app = App(model, terminal)
+if __name__ == "__main__":
+    instructions = sys.argv[1] if len(sys.argv) > 1 else "Print the first 10 Fibonacci numbers."
 
-# Draw the graph for fun
-app.draw_graph("graph.png")
+    # Setup terminal and model
+    terminal = Terminal()
+    model = ChatAnthropic(model="claude-3-5-sonnet-20241022", temperature=0)
+    # model = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+    app = App(model, terminal)
 
-# Run the app
-instructions = "Print the first 10 Fibonacci numbers." # Edit this line to change the instructions
-app.run(instructions)
+    # Draw the graph for fun
+    app.draw_graph("graph.png")
+
+    # Run the app
+    app.run(instructions)
