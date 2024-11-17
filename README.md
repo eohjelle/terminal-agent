@@ -8,6 +8,10 @@ I made this to familiarize myself with [LangGraph](https://langchain-ai.github.i
 
 Technically, the most painful part of the project ended up being recording terminal output using [pexpect](https://github.com/pexpect/pexpect).
 
+## Examples
+
+See `/example-logs` for some examples of what the agent can do. 
+
 ### Technical note
 
 The `terminal_agent` function in `graph.py` calls `model` using LangGraph's `.with_structured_output`. It seems that this is incompatible with tool calling (in particular the `ask_user` tool). I suspect that this may change in the future, so I will just leave it as it is.
